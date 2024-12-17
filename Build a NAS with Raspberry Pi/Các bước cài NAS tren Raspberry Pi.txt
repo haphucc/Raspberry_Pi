@@ -1,0 +1,54 @@
+https://www.youtube.com/watch?v=U1oytRuOa0k
+
+Các bước cài NAS tren Raspberry Pi
+- Sử dung Pi 3B
+- Cài OS 2021-10-30-raspios-bullseye-arm64-lite.zip
+(https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-2021-11-08/)
+- Cập nhật OS 
+	sudo apt update
+	sudo apt upgrade -y
+- Cài đặt OpenMediaVault
+	wget -O - https://raw.githubusercontent.com/OpenMediaVault-Plugin-Developers/installScript/master/install | sudo bash
+	sudo reboot
+	 
+	Summary for raspberrypi
+	-------------
+	Succeeded: 91 (changed=49)
+	Failed:     0
+	-------------
+	Total states run:     91
+	Total run time:   99.204 s
+- Login OMV bằng địa chỉ IP của Raspberry Pi: 192.168.xx.xx
+	user name: admin
+	password: openmediavault
+- Change password of OMV: User setting --> Change password
+- Mounting USB hard drive
+	Cắm ổ cứng vào Raspberry Pi
+	Check ổ cứng vào Storage --> Disks 
+	Thiết lập gắn kết:Storage --> File Systems: Chọn mũi tên màu xanh góc trái trên (Mount an existing file system), chọn ổ đĩa và nhấn Save --> Apply
+- Establishing a shared folder
+	Storage --> Shared Folders --> Create: đặt tên cho NAS, chọn ổ đĩa (File System)
+	Chọn quyền truy cập (Permissons) dòng kề cuối --> Save --> Apply
+- NAS Network Sharing Settings: 
+	Services --> SMB/CIFS --> Settings --> Tích Enabled --> Save
+ 	Services --> SMB/CIFS --> Shares --> Chọn ổ đĩa NAS: Shared folder --> Save
+	NFS --> Settings --> Tích Enabled --> Save
+	NFS --> Shares --> chọn Create --> chọn Shared folder --> nhập tên Client: tên của /NAS/
+	Nếu gặp lỗi "500 - Internal Server Error": 
+		sudo nano /etc/exports
+		comment các lệnh và thêm lệnh: /export/Nas *(rw,sync,no_subtree_check,insecure,no_root_squash)
+		sudo modprobe nfs
+		sudo modprobe nfsd
+		sudo systemctl restart nfs-kernel-server
+		sudo systemctl status nfs-kernel-server
+- Adding a user: 
+	Users --> Settings --> Tich Enable --> Chọn Location --> Save
+	Users --> Users --> Đặt tên và mật khẩu --> Save --> Apply
+- Accessing NAS over network: 
+	Add a network location --> Nhập \\<IP Add>\<Tên NAS> (\\192.168.1.8\Nas)
+	Nhập tên và mật khẩu ở trên
+
+
+ 
+
+	
