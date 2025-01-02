@@ -1,0 +1,46 @@
+* Raspberry Pi Bullseye OS 6.1.21
+* Step 1. Download the bash scripts
+mkdir ArduCam_64mpx
+wget -O install_pivariety_pkgs.sh https://github.com/ArduCAM/Arducam-Pivariety-V4L2-Driver/releases/download/install_script/install_pivariety_pkgs.sh
+chmod +x install_pivariety_pkgs.sh
+
+* Step 2. Install libcamera
+./install_pivariety_pkgs.sh -p libcamera_dev
+
+* Step 3. Install libcamera-apps
+./install_pivariety_pkgs.sh -p libcamera_apps
+
+* Step 4. Modify Config file
+Bullseye OS on Pi0-Pi3
+
+sudo nano /boot/config.txt 
+#Find the line: [all], add the following item under it:
+dtoverlay=arducam-64mp
+#Save and reboot.
+
+Open a terminal 
+Run sudo raspi-config
+Navigate to Advanced Options 
+Enable Glamor graphic acceleration 
+Reboot your Pi
+
+If you encounter the display issues, please also execute the following steps:
+
+Open a terminal
+Run sudo raspi-config
+Navigate to Advanced Options
+Navigate to GL Driver
+Select GL (Full KMS)
+Reboot your Pi
+
+*** Result: "Run libcamera-hello on terminal"
+
+pi@raspberrypi:~ $ libcamera-hello
+Made X/EGL preview window
+[0:02:44.848429432] [1994]  INFO Camera camera_manager.cpp:297 libcamera v0.0.0+4367-ad9428b4
+[0:02:44.964805858] [1995]  WARN CameraSensorProperties camera_sensor_properties.cpp:261 No static properties available for 'arducam_64mp'
+[0:02:44.965203433] [1995]  WARN CameraSensorProperties camera_sensor_properties.cpp:263 Please consider updating the camera sensor properties database
+[0:02:45.156846909] [1995]  INFO RPI vc4.cpp:444 Registered camera /base/soc/i2c0mux/i2c@1/arducam_64mp@1a to Unicam device /dev/media3 and ISP device /dev/media0
+[0:02:45.157134790] [1995]  INFO RPI pipeline_base.cpp:1101 Using configuration file '/usr/share/libcamera/pipeline/rpi/vc4/rpi_apps.yaml'
+[0:02:45.167429075] [1994]  INFO Camera camera.cpp:1033 configuring streams: (0) 2048x1536-YUV420
+[0:02:45.169332621] [1995]  INFO RPI vc4.cpp:572 Sensor: /base/soc/i2c0mux/i2c@1/arducam_64mp@1a - Selected sensor format: 2312x1736-SRGGB10_1X10 - Selected unicam format: 2312x1736-pRAA
